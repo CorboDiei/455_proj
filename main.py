@@ -61,10 +61,15 @@ with mp_hands.Hands(
                     count += 1
                 cv2.putText(image, str(count), (150, 150), cv2.FONT_HERSHEY_PLAIN, 12, (0, 255, 0), 12)
                 sample_count += 1
-                sample_map[count] += 1
+                sample_map[count] = sample_map.get(count, 0) + 1
         if cv2.waitKey(5) & 0xFF == 27:
             break
         cv2.imshow("MediaPipe Hands", image)
+        if sample_count == 20:
+            max_val = max(sample_map, key=lambda key: sample_map[key])
+            print(max_val)
+            sample_count = 0
+            sample_map = {}
 
     cap.release()
 
