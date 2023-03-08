@@ -1,0 +1,11 @@
+.main_div {
+    width: 700px;
+    margin: auto;
+    text-align: center;
+}
+
+.explanation {
+    font-size: 20px;
+    margin: auto;
+    width: 50%;
+}
