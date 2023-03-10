@@ -7,9 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
-
 def get_data():
     transform_train = transforms.Compose([
         transforms.Resize((28, 28)), # different size data
@@ -23,9 +20,6 @@ def get_data():
     classes = ['corbo', 'not_corbo']
     return {'train': trainloader, 'test': testloader, 'classes': classes}
 
-data = get_data()
-print(data['train'].__dict__)
-
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
@@ -38,11 +32,15 @@ class ConvNet(nn.Module):
         x = F.max_pool2d(x, kernel_size=2, stride=2)
         x = F.relu(self.conv2(x))
         x = F.max_pool2d(x, kernel_size=2, stride=2)
-        x = torch.flatten(x, 1)
+        # print(x.shape)
+        x = torch.flatten(x)
+        # print(x.shape)
         x = self.fc1(x)
         return x
 
 def train(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verbose=1):
+#   device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+  device = torch.device("cpu")
   net.to(device)
   losses = []
   criterion = nn.CrossEntropyLoss()
@@ -65,7 +63,7 @@ def train(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verbose=1
         # print statistics
         losses.append(loss.item())
         sum_loss += loss.item()
-        if i % 100 == 99:
+        if i % 5 == 1:
             if verbose:
               print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, sum_loss / 100))
@@ -75,6 +73,7 @@ def train(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verbose=1
 def accuracy(net, dataloader):
   correct = 0
   total = 0
+  device = torch.device("cpu")
   with torch.no_grad():
       for batch in dataloader:
           images, labels = batch[0].to(device), batch[1].to(device)
@@ -87,10 +86,16 @@ def accuracy(net, dataloader):
 def smooth(x, size):
   return np.convolve(x, np.ones(size)/size, mode='valid')
 
-conv_net = ConvNet()
-conv_losses = train(conv_net, data['train'], epochs=15)
-torch.save(conv_net.state_dict(), './model')
-plt.plot(smooth(conv_losses, 50))
+def main():
+    data = get_data()
+    print(data['train'].__dict__)
+    conv_net = ConvNet()
+    conv_losses = train(conv_net, data['train'], epochs=3)
+    torch.save(conv_net.state_dict(), './model')
+    plt.plot(smooth(conv_losses, 50))
 
-print("Training accuracy: {}".format(accuracy(conv_net, data['train'])))
-print("Testing accuracy: {}".format(accuracy(conv_net, data['test'])))
+    print("Training accuracy: {}".format(accuracy(conv_net, data['train'])))
+    print("Testing accuracy: {}".format(accuracy(conv_net, data['test'])))
+
+if __name__ == "__main__":
+   main()

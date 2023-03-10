@@ -46,10 +46,12 @@ with mp_face_detection.FaceDetection(
             # print("{} {} {} {}".format(ul_x, ul_y, lr_x, lr_y))
             im_arr = image[ul_y:lr_y, ul_x:lr_x]
             im = Image.fromarray(cv2.cvtColor(im_arr, cv2.COLOR_BGR2RGB))
-            if count < 404 and count % 3 == 0:
-                im.save("dataset/corbo/im{}.jpg".format(count))
+            # if count < 404 and count % 3 == 0:
+            #     im.save("dataset/corbo/im{}.jpg".format(count))
             for detection in results.detections:
                 map_drawing.draw_detection(image, detection)
+                # print(MessageToDict(detection))
+            print(len(results.detections))
 
         cv2.imshow("MediaPipe Face Detection", image)
         if cv2.waitKey(5) & 0xFF == 27:
