@@ -24,7 +24,7 @@ This project only concerns the computer vision portion of this system. This is a
 
 ### Previous Work
 
-I utilized the following pre-written code to fascilitate my job in this project:
+I utilized the following pre-written code/architectures to fascilitate my job in this project:
 
 - pytorch (torchvision) 
 
@@ -41,8 +41,8 @@ not_corbo n=5640
 
 ### Results and Discussion
 
-Originally I was just going to do teh finger counting part of the pipeline, but I found that when I had friends over the system would start choosing their hands even if they were farther away from the camera than me, so I had to increase the complexity of the system by quite a bit with the facial recognition system. Doing this, however, also let me explore more parts of the machine learning aspect of the class.
+Originally I was just going to do the finger counting part of the pipeline, but I found that when I had friends over the system would start choosing their hands even if they were farther away from the camera than me, so I had to increase the complexity of the system by quite a bit with the facial recognition system. Doing this, however, also let me explore more parts of the machine learning aspect of the class.
 
 The system for the most part chooses my face and thus my hands. Sometimes mediapipe either misses a hand or doubles up on the hand detection for a few frames before sorting out. To help smooth out the final output then, I could do some batching and choose the mode finger count.
 
-I will probably continue to integrate this project into the system I mention at the beginning. To continue this I will need to build a raspberry pi system with a camera and a decent graphics system to perform the operations contained in thsi project. Then I will need to create a system that takes that output and pings the Alexa API based on which playlist is being indicated. 
+I will probably continue to integrate this project into the system I mention at the beginning. To continue this I will need to build a raspberry pi system with a camera and a decent graphics system to perform the operations contained in this project. Then I will need to create a system that takes that output and pings the Alexa API based on which playlist is being indicated. 
